@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Button, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { enqueueSnackbar } from 'notistack';
 import { LoadingButton } from '@mui/lab';
 import axiosApi from '../../axiosApi';
@@ -128,6 +128,9 @@ const MutateQuotes = () => {
         <LoadingButton loading={isLoading} variant="contained" type="submit">
           Save
         </LoadingButton>
+        <Button component={Link} to="/" color="inherit">
+          Back
+        </Button>
       </Grid>
     </Grid>
   );

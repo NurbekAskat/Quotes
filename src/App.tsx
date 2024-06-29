@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import NavBar from './components/Navbar/NavBar';
 import { Container, Typography } from '@mui/material';
 import MutateQuotes from './containers/MutateQuotes/MutateQuotes';
+import Quotes from './containers/Quotes/Quotes';
 
 function App() {
 
@@ -14,7 +15,8 @@ function App() {
       </header>
       <Container component="main">
         <Routes>
-
+          <Route path="/" element={<Quotes />} />
+          <Route path="/quotes/:id/edit" element={<MutateQuotes />} />
           <Route path="/new-quote" element={<MutateQuotes />} />
           <Route
             path="*"

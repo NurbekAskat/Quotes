@@ -32,12 +32,6 @@ const NavBar = () => {
           >
             All quotes
           </Button>
-          <Button component={NavLink} to="/new-post" color="inherit">
-            New post
-          </Button>
-          <Button component={NavLink} to="/about" color="inherit">
-            About us
-          </Button>
           <Button component={NavLink} to="/new-quote" color="inherit">
             New quote
           </Button>
