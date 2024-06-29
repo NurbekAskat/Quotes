@@ -2,6 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import axiosApi from '../../axiosApi';
 import { ApiQuotes, Quote } from '../../types';
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Button,
   Card,
@@ -11,16 +14,24 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, NavLink, useParams } from 'react-router-dom';
 import { enqueueSnackbar } from 'notistack';
 
 const Quotes = () => {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const { category } = useParams();
+
   const fetchPosts = useCallback(async () => {
     setIsLoading(true);
-    const response = await axiosApi.get<ApiQuotes | null>('/quotes.json');
+
+    let categoryURL = '';
+    if (category) {
+      categoryURL = `?orderBy="category"&equalTo="${category}"`;
+    }
+
+    const response = await axiosApi.get<ApiQuotes | null>('/quotes.json' + categoryURL);
 
     const postsResponse = response.data;
 
@@ -37,7 +48,7 @@ const Quotes = () => {
     }
 
     setIsLoading(false);
-  }, []);
+  }, [category]);
 
   useEffect(() => {
     void fetchPosts();
@@ -47,7 +58,7 @@ const Quotes = () => {
     setIsLoading(true);
     try {
       await axiosApi.delete(`/quotes/${id}.json`);
-      setQuotes((prevQuotes) => prevQuotes.filter((quote) => quote.id !== id));
+      fetchPosts();
     } catch (e) {
       enqueueSnackbar({ variant: 'error', message: 'Something went wrong' });
     }
@@ -55,64 +66,111 @@ const Quotes = () => {
   };
 
   return (
-    <Grid
-      container
-      spacing={2}
-      flexWrap="wrap"
-      justifyContent="space-around"
-      alignItems="center"
-    >
-      {isLoading && (
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100px',
-            width: '100%',
-          }}
+    <div className="main">
+      <Accordion>
+        <AccordionSummary
+          aria-controls="panel1-content"
+          id="panel1-header"
         >
-          <CircularProgress />
-        </Box>
-      )}
-      {quotes.length === 0 && !isLoading && (
-        <Typography variant="h2">Sorry, UwU</Typography>
-      )}
-      {quotes.map((quotes) => (
-        <Grid item sx={{ width: '50%' }}>
-          <Card>
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                {quotes.category}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {quotes.author}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {quotes.text}
-              </Typography>
-            </CardContent>
-            <CardActions sx={{ display: 'flex' }}>
-              <Button
-                size="small"
-                component={Link}
-                to={`/quotes/${quotes.id}/edit`}
-                className="ms-auto"
-              >
-                Edit quote
+          Categories
+        </AccordionSummary>
+        <AccordionDetails>
+          <Grid direction='column'>
+            <Grid item>
+              <Button component={NavLink} to="/" variant="contained" fullWidth sx={{mb: 2}}>
+                All
               </Button>
-              <Button
-                size="small"
-                className=""
-                onClick={() => onDelete(quotes.id)}
-              >
-                Delete quote
+              <Button component={NavLink} to="/quotes/star-wars" variant="contained" fullWidth sx={{mb: 2}}>
+                Star wars
               </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-      ))}
-    </Grid>
+            </Grid>
+            <Grid item>
+              <Button component={NavLink} to="/quotes/humour" variant="contained" fullWidth sx={{mb: 2}}>
+                humour
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button component={NavLink} to="/quotes/saying" variant="contained" fullWidth sx={{mb: 2}}>
+                saying
+              </Button>
+
+            </Grid>
+            <Grid item>
+              <Button component={NavLink} to="/quotes/famous-people" variant="contained" fullWidth sx={{mb: 2}}>
+                Famous people
+              </Button>
+
+            </Grid>
+            <Grid item>
+              <Button component={NavLink} to="/quotes/motivational" variant="contained" fullWidth>
+                Motivational
+              </Button>
+
+            </Grid>
+          </Grid>
+        </AccordionDetails>
+      </Accordion>
+      <Grid
+        container
+        spacing={2}
+        flexWrap="wrap"
+        justifyContent="space-around"
+        alignItems="center"
+        sx={{ ml: 1 }}
+      >
+        {isLoading && (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '100px',
+              width: '100%',
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        )}
+        {quotes.length === 0 && !isLoading && (
+          <Typography variant="h2">Sorry, UwU</Typography>
+        )}
+
+        {quotes.map((quotes) => (
+          <Grid item sx={{ width: '50%' }} key={quotes.id}>
+            <Card>
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {quotes.category}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {quotes.author}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {quotes.text}
+                </Typography>
+              </CardContent>
+              <CardActions sx={{ display: 'flex' }}>
+                <Button
+                  size="small"
+                  component={Link}
+                  to={`/quotes/${quotes.id}/edit`}
+                  className="ms-auto"
+                >
+                  Edit quote
+                </Button>
+                <Button
+                  size="small"
+                  className=""
+                  onClick={() => onDelete(quotes.id)}
+                >
+                  Delete quote
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </div>
   );
 };
 

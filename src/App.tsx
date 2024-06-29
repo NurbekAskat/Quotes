@@ -16,6 +16,7 @@ function App() {
       <Container component="main">
         <Routes>
           <Route path="/" element={<Quotes />} />
+          <Route path="/quotes/:category" element={<Quotes />} />
           <Route path="/quotes/:id/edit" element={<MutateQuotes />} />
           <Route path="/new-quote" element={<MutateQuotes />} />
           <Route

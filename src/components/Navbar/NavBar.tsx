@@ -30,7 +30,7 @@ const NavBar = () => {
             color="inherit"
             className="ms-auto"
           >
-            All quotes
+            quotes
           </Button>
           <Button component={NavLink} to="/new-quote" color="inherit">
             New quote
