@@ -2,9 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import axiosApi from '../../axiosApi';
 import { ApiQuotes, Quote } from '../../types';
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Box,
   Button,
   Card,
@@ -31,7 +28,9 @@ const Quotes = () => {
       categoryURL = `?orderBy="category"&equalTo="${category}"`;
     }
 
-    const response = await axiosApi.get<ApiQuotes | null>('/quotes.json' + categoryURL);
+    const response = await axiosApi.get<ApiQuotes | null>(
+      '/quotes.json' + categoryURL,
+    );
 
     const postsResponse = response.data;
 
@@ -67,49 +66,71 @@ const Quotes = () => {
 
   return (
     <div className="main">
-      <Accordion>
-        <AccordionSummary
-          aria-controls="panel1-content"
-          id="panel1-header"
-        >
-          Categories
-        </AccordionSummary>
-        <AccordionDetails>
-          <Grid direction='column'>
-            <Grid item>
-              <Button component={NavLink} to="/" variant="contained" fullWidth sx={{mb: 2}}>
-                All
-              </Button>
-              <Button component={NavLink} to="/quotes/star-wars" variant="contained" fullWidth sx={{mb: 2}}>
-                Star wars
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button component={NavLink} to="/quotes/humour" variant="contained" fullWidth sx={{mb: 2}}>
-                humour
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button component={NavLink} to="/quotes/saying" variant="contained" fullWidth sx={{mb: 2}}>
-                saying
-              </Button>
-
-            </Grid>
-            <Grid item>
-              <Button component={NavLink} to="/quotes/famous-people" variant="contained" fullWidth sx={{mb: 2}}>
-                Famous people
-              </Button>
-
-            </Grid>
-            <Grid item>
-              <Button component={NavLink} to="/quotes/motivational" variant="contained" fullWidth>
-                Motivational
-              </Button>
-
-            </Grid>
-          </Grid>
-        </AccordionDetails>
-      </Accordion>
+      <Grid direction="column" sx={{ width: '300px' }}>
+        <Grid item>
+          <Button
+            component={NavLink}
+            to="/"
+            variant="contained"
+            fullWidth
+            sx={{ mb: 2 }}
+          >
+            All
+          </Button>
+          <Button
+            component={NavLink}
+            to="/quotes/star-wars"
+            variant="contained"
+            fullWidth
+            sx={{ mb: 2 }}
+          >
+            Star wars
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            component={NavLink}
+            to="/quotes/humour"
+            variant="contained"
+            fullWidth
+            sx={{ mb: 2 }}
+          >
+            humour
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            component={NavLink}
+            to="/quotes/saying"
+            variant="contained"
+            fullWidth
+            sx={{ mb: 2 }}
+          >
+            saying
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            component={NavLink}
+            to="/quotes/famous-people"
+            variant="contained"
+            fullWidth
+            sx={{ mb: 2 }}
+          >
+            Famous people
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            component={NavLink}
+            to="/quotes/motivational"
+            variant="contained"
+            fullWidth
+          >
+            Motivational
+          </Button>
+        </Grid>
+      </Grid>
       <Grid
         container
         spacing={2}
@@ -132,9 +153,8 @@ const Quotes = () => {
           </Box>
         )}
         {quotes.length === 0 && !isLoading && (
-          <Typography variant="h2">Sorry, UwU</Typography>
+          <Typography variant="h2">Sorry, No quotes</Typography>
         )}
-
         {quotes.map((quotes) => (
           <Grid item sx={{ width: '50%' }} key={quotes.id}>
             <Card>
@@ -162,6 +182,7 @@ const Quotes = () => {
                   size="small"
                   className=""
                   onClick={() => onDelete(quotes.id)}
+                  variant="contained"
                 >
                   Delete quote
                 </Button>
@@ -175,4 +196,3 @@ const Quotes = () => {
 };
 
 export default Quotes;
-

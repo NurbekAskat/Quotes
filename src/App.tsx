@@ -6,8 +6,6 @@ import MutateQuotes from './containers/MutateQuotes/MutateQuotes';
 import Quotes from './containers/Quotes/Quotes';
 
 function App() {
-
-
   return (
     <>
       <header>
